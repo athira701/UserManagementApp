@@ -1,0 +1,15 @@
+<div class="home-wrapper">
+  <div class="home-container" *ngIf="user$ | async as user">
+    <h2>Welcome, {{ user.name }}!</h2>
+    <p>You have successfully logged in. Explore your profile and settings.</p>
+
+    <div class="btn-group">
+      <button (click)="goToProfile()">Profile</button>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div *ngIf="!(user$ | async)">
+    <p>Loading user data...</p>
+  </div>
+</div>

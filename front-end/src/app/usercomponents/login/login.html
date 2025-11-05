@@ -1,0 +1,59 @@
+<div class="login-wrapper">
+  <div class="container">
+    <h1>User Login</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Email:</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        <div
+          class="error"
+          *ngIf="
+            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+          "
+        >
+          Valid email is required
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Password:</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+        <div
+          class="error"
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+        >
+          Password must be at least 8 characters
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid || (loading$ | async)"
+      >
+        {{ (loading$ | async) ? 'Logging in...' : 'Login' }}
+      </button>
+
+      
+      <div class="error-message" *ngIf="error$ | async as error">
+        {{ error }}
+      </div>
+    </form>
+
+    <p class="signup-text">
+      Don't have an account?
+      <a (click)="goToRegister()">Register here</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(140deg, #d568a949, #7360d140);
+  font-family: 'Arial', sans-serif;
+}
+
+.container {
+  background: linear-gradient(145deg, #7360d1ae, #d568a997);
+  padding: 60px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  text-align: center;
+  color: #4a4a4a;
+}
+
+.container h1 {
+  margin-bottom: 45px;
+  color: #ffffff;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.input-group {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  color: #5c0078;
+  background-color: #ffffff;
+}
+
+.input-group input::placeholder {
+  color: #be91c6;
+  font-weight: 500;
+}
+
+.input-group input:focus {
+  border-color: #de89ff;
+  box-shadow: 0 0 8px rgba(255, 154, 162, 0.4);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #d568a997, #7360d1ae);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #ff74c897, #866effae);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+.error-message {
+  color: #d9534f;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+}

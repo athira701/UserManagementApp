@@ -1,0 +1,141 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(140deg, #d568a949, #7360d140);
+  font-family: 'Arial', sans-serif;
+}
+
+.container {
+  background: linear-gradient(145deg, #7360d1ae, #d568a997);
+  padding: 60px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  text-align: center;
+  color: #fff;
+}
+
+.container h1 {
+  margin-bottom: 25px;
+  font-size: 35px;
+  color: #ffffff;
+}
+
+.profile-pic {
+  margin-bottom: 20px;
+}
+.profile-pic img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.upload-btn {
+  background: linear-gradient(140deg, #d568a997, #7360d1ae);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  width: 100%;
+  transition: 0.3s;
+}
+.upload-btn:hover {
+  background: linear-gradient(135deg, #ff74c897, #866effae);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.input-box {
+  position: relative;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 10px 38px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  color: #5c0078;
+  background-color: #ffffff;
+}
+
+.input-box input:focus {
+  border-color: #de89ff;
+  box-shadow: 0 0 8px rgba(255, 154, 162, 0.4);
+}
+
+.edit-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.button-group button {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel {
+  background: #ffffffb0;
+  color: #5c0078;
+}
+
+.cancel:hover {
+  background: #ffffff;
+}
+
+.save {
+  background: linear-gradient(140deg, #d568a997, #7360d1ae);
+  color: #ffffff;
+}
+
+.save:hover {
+  background: linear-gradient(135deg, #ff74c897, #866effae);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}

@@ -1,0 +1,134 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-actions">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search username..."
+        [(ngModel)]="searchTerm"
+        (input)="searchUsers()"
+      />
+      <i class="fa fa-search"></i>
+    </div>
+    <button class="add-user-btn" (click)="openAddUserModal()">
+      <i class="fa fa-user-plus"></i> Add User
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td class="actions">
+            <i
+              class="fa fa-edit edit-icon"
+              title="Edit"
+              (click)="openEditModal(user)"
+            ></i>
+            <i
+              class="fa fa-trash delete-icon"
+              title="Delete"
+              (click)="deleteUser(user._id)"
+            ></i>
+          </td>
+        </tr>
+        <tr *ngIf="users.length === 0">
+          <td colspan="3" style="text-align: center; color: gray;">
+            No users found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ADD MODAL -->
+<div class="modal" *ngIf="showAddModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeAddUserModal()">&times;</span>
+    <h2>Add New User</h2>
+
+    <form (ngSubmit)="createUser()">
+      <div class="form-group">
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder="Enter username"
+          [(ngModel)]="newUser.name"
+          name="name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          placeholder="Enter email"
+          [(ngModel)]="newUser.email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          [(ngModel)]="newUser.password"
+          name="password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="save-btn">Add</button>
+      <button type="button" class="cancel-btn" (click)="closeAddUserModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" *ngIf="showEditModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeEditModal()">&times;</span>
+    <h2>Edit User</h2>
+    <form (ngSubmit)="updateUser()">
+      <div class="form-group">
+        <label>Username</label>
+        <input
+          type="text"
+          [(ngModel)]="editUserData.name"
+          name="editName"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="editUserData.email"
+          name="editEmail"
+          required
+        />
+      </div>
+
+      <button type="submit" class="save-btn">Update User</button>
+    </form>
+  </div>
+</div>

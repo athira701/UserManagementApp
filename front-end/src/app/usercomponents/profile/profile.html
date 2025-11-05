@@ -1,0 +1,48 @@
+<div class="profile-wrapper" *ngIf="user$ | async as user">
+  <div class="container">
+    <h1>Profile</h1>
+
+    <div class="profile-pic">
+      <img [src]="user.profileImage" alt="Profile Image" />
+    </div>
+
+    <input
+      type="file"
+      #fileInput
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      style="display: none"
+    />
+
+    <button class="upload-btn" (click)="fileInput.click()">Upload Image</button>
+
+    <button
+      *ngIf="selectedFile"
+      class="upload-btn"
+      (click)="uploadImage(user.email)"
+    >
+      Confirm Upload
+    </button>
+
+    <form>
+      <div class="input-group">
+        <label for="username"> Name </label>
+        <div class="input-box">
+          <input type="text" id="username" [value]="user.name" />
+          <span class="edit-icon">🖊️</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="email"> Email </label>
+        <div class="input-box">
+          <input type="email" id="email" [value]="user.email" />
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="save" (click)="goToHome()">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

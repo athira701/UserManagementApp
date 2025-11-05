@@ -1,0 +1,29 @@
+<div class="login-wrapper">
+  <div class="container">
+    <h1>Admin Login</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Email:</label>
+        <input type="email" formControlName="email" placeholder="Enter your email" required />
+        <small class="error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+          Valid email is required
+        </small>
+      </div>
+
+      <div class="input-group">
+        <label>Password:</label>
+        <input type="password" formControlName="password" placeholder="Enter your password" required />
+        <small class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+          Password must be at least 8 characters long
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

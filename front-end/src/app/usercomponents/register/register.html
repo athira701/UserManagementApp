@@ -1,0 +1,57 @@
+<div class="register-wrapper">
+  <div class="container">
+    <h2>User Registration</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label>Name:</label>
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Enter your name"
+        />
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <div>
+        <label>Confirm Password:</label>
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirm your password"
+        />
+      </div>
+      <div
+        *ngIf="registerForm.errors?.['mismatch'] && 
+        (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)"
+        class="passworderror"
+      >
+        Passwords do not match!
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p class="signin-text">
+      Already have an account?
+      <a (click)="goToLogin()">Login here</a>
+    </p>
+  </div>
+</div>
