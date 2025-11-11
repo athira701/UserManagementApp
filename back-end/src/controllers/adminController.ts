@@ -1,47 +1,47 @@
-import { Request,Response } from "express";
+import { Request, Response } from "express";
 import User from "../model/userSchema";
-import argon2 from "argon2"
-import jwt from "jsonwebtoken"
+import argon2 from "argon2";
+import jwt from "jsonwebtoken";
 
+const adminLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
 
-const adminLogin = async(req:Request, res: Response) =>{
-    try {
-        const { email,password} = req.body
+    const admin = await User.findOne({ email, role: "admin" });
 
-        const admin = await User.findOne({email, role:"admin"})
-
-        if(!admin){
-            return res.status(404).json({message: "Admin not found"})
-        }
-
-        const validPassword = await argon2.verify(admin.password, password)
-        if(!validPassword){
-            return res.status(400).json({message:"Invalid credentials"})
-        }
-
-        const token = jwt.sign(
-            {id:admin._id,role:admin.role,email:admin.email},
-            process.env.JWT_SECRET!,
-            {expiresIn:"1d"}
-        )
-
-        res.status(200).json({
-            message:"Admin login successful",
-            token,
-            user:{
-                _id:admin._id,
-                name:admin.name,
-                email:admin.email,
-                role: admin.role,
-                profileImage:admin.profileImage,
-            }
-        })
-
-    } catch (error) {
-        console.log("Admin login error:",error)
-        res.status(500).json({message:"Internal server error during admin login"})
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
     }
-}
+
+    const validPassword = await argon2.verify(admin.password, password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: admin._id, role: admin.role, email: admin.email },
+      process.env.JWT_SECRET!,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      message: "Admin login successful",
+      token,
+      user: {
+        _id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        profileImage: admin.profileImage,
+      },
+    });
+  } catch (error) {
+    console.log("Admin login error:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error during admin login" });
+  }
+};
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -75,18 +75,15 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
 
-  
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-   
     if (!password) {
       return res.status(400).json({ message: "Password is required" });
     }
 
-    
     const hashedPassword = await argon2.hash(password);
 
     const newUser = new User({
@@ -113,7 +110,6 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -125,7 +121,8 @@ const updateUser = async (req: Request, res: Response) => {
       { new: true }
     ).select("-password");
 
-    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found" });
 
     res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
@@ -150,10 +147,10 @@ const deleteUser = async (req: Request, res: Response) => {
 };
 
 export {
-    adminLogin,
-    getAllUsers,
-    searchUsers,
-    createUser,
-    updateUser,
-    deleteUser
-}
+  adminLogin,
+  getAllUsers,
+  searchUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+};

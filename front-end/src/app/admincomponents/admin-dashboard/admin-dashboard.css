@@ -198,11 +198,12 @@ td:last-child {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease;
   position: relative;
+  font-family: "Poppins", sans-serif; 
 }
 
 .modal-content h2 {
   text-align: center;
-  color: #5a4fdc;
+  color: #d04e9c;
   font-size: 22px;
   margin-bottom: 20px;
   font-weight: 700;

@@ -42,8 +42,7 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
 
-console.log("-------------");
-
+    console.log('-------------');
 
     this.loading$ = this.store.select(selectAuthLoading);
     this.error$ = this.store.select(selectAuthError);

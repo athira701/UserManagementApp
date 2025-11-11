@@ -1,8 +1,15 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AdminService } from '../../core/services/admin.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../core/store/reducers';
+import * as AdminActions from '../../core/store/actions/admin.actions';
+import { selectAdminError, selectAdminLoading } from '../../core/store/selectors/admin.selectors';
 
 @Component({
   selector: 'app-admin-login',
@@ -11,22 +18,26 @@ import { AdminService } from '../../core/services/admin.service';
   templateUrl: './admin-login.html',
   styleUrls: ['./admin-login.css']
 })
-export class AdminLogin {
-
+export class AdminLogin implements OnInit {
   loginForm!: FormGroup;
   errorMessage: string = '';
-  
+  loading$: any;
+  error$: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private adminService: AdminService,
-    private router: Router
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
+    });
+
+
+    this.loading$ = this.store.select(selectAdminLoading);
+    this.error$ = this.store.select(selectAdminError);
+
+    this.error$.subscribe((err:any) => {
+      if (err) this.errorMessage = err;
     });
   }
 
@@ -36,20 +47,7 @@ export class AdminLogin {
       return;
     }
 
-   
-    const credentials = this.loginForm.value;
-
-    this.adminService.login(credentials).subscribe({
-      next: (response) => {
-        if (response.token) {
-          this.adminService.saveToken(response.token);
-          this.router.navigateByUrl('/admin/dashboard');
-        }
-      },
-      error: (err) => {
-        console.error('Login failed:', err);
-        this.errorMessage = err.error?.message || 'Invalid email or password.';
-      }
-    });
+    const { email, password } = this.loginForm.value;
+    this.store.dispatch(AdminActions.adminLoginStart({ email, password }));
   }
 }

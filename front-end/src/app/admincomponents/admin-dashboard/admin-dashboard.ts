@@ -1,84 +1,72 @@
-// import { Component } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { AdminService } from '../../core/services/admin.service';
-
-// @Component({
-//   selector: 'app-admin-dashboard',
-//   standalone: true,
-//   templateUrl: './admin-dashboard.html',
-//   styleUrls: ['./admin-dashboard.css']
-// })
-// export class AdminDashboard {
-//   constructor(private adminService: AdminService, private router: Router) {}
-
-//   logout() {
-//     this.adminService.logout();
-//     this.router.navigate(['/admin/login']);
-//   }
-// }
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../core/services/admin.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../core/store/reducers';
+import * as AdminActions from '../../core/store/actions/admin.actions';
+import {
+  selectAdminUsers,
+  selectAdminLoading,
+} from '../../core/store/selectors/admin.selectors';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-dashboard',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.css'],
 })
 export class AdminDashboard implements OnInit {
-  users: any[] = [];
-  searchTerm = '';
+  users$!: Observable<any[]>;
+  loading$!: Observable<boolean>;
+  allUsers: any[] = [];
+  filteredUsers: any[] = [];
 
+  searchTerm = '';
   showAddModal = false;
   newUser = { name: '', email: '', password: '' };
-
   showEditModal = false;
   editUserData: any = { name: '', email: '', _id: '' };
 
-  constructor(private adminService: AdminService, private router: Router) {}
+  constructor(private store: Store<AppState>, private router: Router) {}
 
   ngOnInit(): void {
+    this.users$ = this.store.select(selectAdminUsers);
+    this.loading$ = this.store.select(selectAdminLoading);
+
+    this.users$.subscribe((users) => {
+      this.allUsers = users;
+      this.searchUsers();
+    });
+
     this.loadUsers();
   }
 
   loadUsers() {
-    this.adminService.getAllUsers().subscribe({
-      next: (data) => {
-        this.users = data;
-      },
-      error: (err) => {
-        console.error('Error fetching users:', err);
-      },
-    });
+    this.store.dispatch(AdminActions.loadUsers());
   }
 
   searchUsers() {
     if (!this.searchTerm.trim()) {
-      this.loadUsers();
+      this.filteredUsers = this.allUsers;
       return;
     }
-    this.adminService.searchUsers(this.searchTerm).subscribe({
-      next: (data) => (this.users = data),
-      error: (err) => console.error('Search failed:', err),
-    });
+
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredUsers = this.allUsers.filter(
+      (user) =>
+        user.name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term)
+    );
   }
 
   deleteUser(id: string) {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.adminService.deleteUser(id).subscribe({
-        next: () => this.loadUsers(),
-        error: (err) => console.error('Error deleting user:', err),
-      });
+      this.store.dispatch(AdminActions.deleteUserStart({ id }));
     }
   }
-
-  //   editUser(id: string) {
-  //   // Navigate to edit page or open modal (you can implement this later)
-  //   console.log('Edit user with ID:', id);
-  // }
 
   openAddUserModal() {
     this.showAddModal = true;
@@ -95,21 +83,12 @@ export class AdminDashboard implements OnInit {
       return;
     }
 
-    this.adminService.createUser(this.newUser).subscribe({
-      next: () => {
-        alert('User created successfully');
-        this.closeAddUserModal();
-        this.loadUsers();
-      },
-      error: (err) => {
-        console.error('Error creating user:', err);
-        alert(err.error?.message || 'Failed to create user');
-      },
-    });
+    this.store.dispatch(AdminActions.createUserStart({ user: this.newUser }));
+    this.closeAddUserModal();
   }
 
   openEditModal(user: any) {
-    this.editUserData = { ...user }; 
+    this.editUserData = { ...user };
     this.showEditModal = true;
   }
 
@@ -119,23 +98,22 @@ export class AdminDashboard implements OnInit {
   }
 
   updateUser() {
-    this.adminService
-      .updateUser(this.editUserData._id, this.editUserData)
-      .subscribe({
-        next: () => {
-          alert('User updated successfully');
-          this.closeEditModal();
-          this.loadUsers();
-        },
-        error: (err) => {
-          console.error('Error updating user:', err);
-          alert(err.error?.message || 'Failed to update user');
-        },
-      });
+    if (!this.editUserData.name || !this.editUserData.email) {
+      alert('Name and Email are required!');
+      return;
+    }
+
+    this.store.dispatch(
+      AdminActions.updateUserStart({
+        id: this.editUserData._id,
+        user: this.editUserData,
+      })
+    );
+    this.closeEditModal();
   }
 
   logout() {
-    this.adminService.logout();
+    this.store.dispatch(AdminActions.adminLogout());
     this.router.navigate(['/admin/login']);
   }
 }
